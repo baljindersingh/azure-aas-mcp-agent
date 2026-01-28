@@ -38,16 +38,11 @@ This solution uses a hybrid architecture to work around Azure Analysis Services 
 
 ### Why This Architecture?
 
-**Azure Analysis Services requires ADOMD.NET** - it does NOT support XMLA over HTTPS. This means:
+**Azure Analysis Services requires ADOMD.NET protocol** - it does NOT support XMLA over HTTPS. This means:
 - ✅ C# with ADOMD.NET works perfectly
 - ❌ Python direct connection doesn't work (no native ADOMD library available)
-- ❌ Direct MCP → AAS fails (all HTTP/XMLA endpoints return 404)
+- ❌ Direct MCP → AAS fails
 - ✅ Solution: C# Azure Function handles AAS connectivity, Python MCP wraps the HTTP endpoint
-
-**Why can't we skip the Azure Function?** The MCP server can't talk directly to AAS because:
-1. Azure Analysis Services only supports the proprietary **ADOMD.NET protocol** (not standard HTTP/REST)
-2. Python has **no native ADOMD library** - it only exists for .NET languages
-3. XMLA over HTTPS is **not supported** by Azure Analysis Services (verified through testing)
 
 For detailed architecture diagrams and decision rationale, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -80,7 +75,7 @@ For detailed architecture diagrams and decision rationale, see [ARCHITECTURE.md]
 
 ### Required Azure Resources
 
-- **Azure Analysis Services** instance with a deployed tabular model
+- **Azure Analysis Services** instance with a deployed tabular model (AdventureWorks sample used in this case)
 - **Azure OpenAI** resource for the AI agent
 - Administrator access to configure AAS permissions
 
@@ -304,20 +299,6 @@ For more detailed troubleshooting, see [SETUP_GUIDE.md](SETUP_GUIDE.md).
 - [Azure Functions Documentation](https://learn.microsoft.com/azure/azure-functions/)
 - [ADOMD.NET Documentation](https://learn.microsoft.com/analysis-services/adomd/developing-with-adomd-net)
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit issues and pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Model Context Protocol](https://modelcontextprotocol.io/)
-- Uses [ADOMD.NET](https://www.nuget.org/packages/Microsoft.AnalysisServices.AdomdClient.NetCore.retail.amd64/) for Analysis Services connectivity
-- Example based on AdventureWorks sample database
-
 ## 📞 Support
 
 For questions or issues:
@@ -326,6 +307,10 @@ For questions or issues:
 3. Search [existing issues](../../issues)
 4. Create a [new issue](../../issues/new) with detailed information
 
+## 📄 License
+
+This project is licensed under the MIT License.
+
 ---
 
-**Note**: This is a proof-of-concept implementation. For production use, consider additional security hardening, error handling, and monitoring capabilities.
+<mark>**Note: This is a proof-of-concept implementation. For production use, consider additional security hardening, error handling, and monitoring capabilities.**</mark>
